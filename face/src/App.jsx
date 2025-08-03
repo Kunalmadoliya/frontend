@@ -1,16 +1,12 @@
-import { useState } from 'react'
 
-import './App.css'
-import FacialExpression from './components/FacialExpression'
+import FacialExpression from "./components/FacialExpression";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-     <FacialExpression/>
+      <FacialExpression />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

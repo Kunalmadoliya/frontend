@@ -1,33 +1,34 @@
 import React, {useEffect, useRef} from "react";
 import * as faceapi from "face-api.js";
+
 export default function FacialExpression() {
   const videoRef = useRef();
-  const canvasRef = useRef();
-  const handleVideoPlay = () => {
-    setInterval(async () => {
-      const detections = await faceapi
-        .detectAllFaces(
-          videoRef.current,
-          new faceapi.TinyFaceDetectorOptions({
-            inputSize: 224,
-            scoreThreshold: 0.4,
-          })
-        )
-        .withFaceExpressions();
 
-      if (detections.length > 0) {
-        const expression = detections[0].expressions;
-        const maxValue = Math.max(...Object.values(expression));
+  const handleVideoPlay = async () => {
+    if (!videoRef.current) return;
 
-        const maxExpression = Object.keys(expression).find(
-          (key) => expression[key] === maxValue
-        );
+    const detections = await faceapi
+      .detectAllFaces(
+        videoRef.current,
+        new faceapi.TinyFaceDetectorOptions({
+          inputSize: 224,
+          scoreThreshold: 0.4,
+        })
+      )
+      .withFaceExpressions();
 
-        console.log(maxExpression);
-      } else {
-        console.log("No face detected");
-      }
-    }, 1000);
+    if (detections.length > 0) {
+      const expression = detections[0].expressions;
+      const maxValue = Math.max(...Object.values(expression));
+
+      const maxExpression = Object.keys(expression).find(
+        (key) => expression[key] === maxValue
+      );
+
+      console.log("Detected expression:", maxExpression);
+    } else {
+      console.log("No face detected");
+    }
   };
 
   useEffect(() => {
@@ -40,7 +41,7 @@ export default function FacialExpression() {
     const startVideo = () => {
       navigator.mediaDevices
         .getUserMedia({video: true})
-        .then((stream) => {
+        .then((stream) => { 
           if (videoRef.current) {
             videoRef.current.srcObject = stream;
           }
@@ -52,14 +53,21 @@ export default function FacialExpression() {
   }, []);
 
   return (
-    <div style={{position: "relative"}}>
-      <video
-        ref={videoRef}
-        autoPlay
-        muted
-        onPlay={handleVideoPlay}
-        style={{width: "720px", height: "560px"}}
-      />
+    <div className="border  h-screen flex justify-center  w-full">
+      <div className="flex items-center gap-10">
+        <video
+          className="border object-cover h-70 rounded-lg"
+          ref={videoRef}
+          autoPlay
+          muted
+        />
+        <button
+          className="border p-5 cursor-pointer rounded-md font-medium"
+          onClick={handleVideoPlay}
+        >
+          Detect Mood
+        </button>
+      </div>
     </div>
   );
 }
