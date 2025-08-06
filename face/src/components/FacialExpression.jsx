@@ -1,6 +1,8 @@
 import React, {useEffect, useRef} from "react";
 import * as faceapi from "face-api.js";
 
+import axios from 'axios';
+
 export default function FacialExpression() {
   const videoRef = useRef();
 
@@ -24,8 +26,11 @@ export default function FacialExpression() {
       const maxExpression = Object.keys(expression).find(
         (key) => expression[key] === maxValue
       );
-
-      console.log("Detected expression:", maxExpression);
+      axios
+        .get(`http://localhost:3000/songs?mood=${maxExpression}`)
+        .then((response) => {
+          console.log(response.data);
+        });
     } else {
       console.log("No face detected");
     }
@@ -41,7 +46,7 @@ export default function FacialExpression() {
     const startVideo = () => {
       navigator.mediaDevices
         .getUserMedia({video: true})
-        .then((stream) => { 
+        .then((stream) => {
           if (videoRef.current) {
             videoRef.current.srcObject = stream;
           }
