@@ -1,9 +1,9 @@
 import React, {useEffect, useRef} from "react";
 import * as faceapi from "face-api.js";
 
-import axios from 'axios';
+import axios from "axios";
 
-export default function FacialExpression() {
+export default function FacialExpression({setSongs}) {
   const videoRef = useRef();
 
   const handleVideoPlay = async () => {
@@ -26,11 +26,10 @@ export default function FacialExpression() {
       const maxExpression = Object.keys(expression).find(
         (key) => expression[key] === maxValue
       );
-      axios
-        .get(`http://localhost:3000/songs?mood=${maxExpression}`)
-        .then((response) => {
-          console.log(response.data);
-        });
+      axios.get(`http://localhost:3000/songs?mood=${maxExpression}`)
+      .then((response) => {
+        setSongs(response.data.songs);
+      });
     } else {
       console.log("No face detected");
     }
@@ -58,16 +57,16 @@ export default function FacialExpression() {
   }, []);
 
   return (
-    <div className="border  h-screen flex justify-center  w-full">
-      <div className="flex items-center gap-10">
+    <div className="">
+      <div className=" gap-10">
         <video
-          className="border object-cover h-70 rounded-lg"
+          className=" object-cover h-70 rounded-lg"
           ref={videoRef}
           autoPlay
           muted
         />
         <button
-          className="border p-5 cursor-pointer rounded-md font-medium"
+          className=" w-full p-5 cursor-pointer rounded-md font-medium"
           onClick={handleVideoPlay}
         >
           Detect Mood

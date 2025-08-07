@@ -1,13 +1,13 @@
+import {useState} from "react";
 
-import FacialExpression from "./components/FacialExpression";
-import MoodyPlayer from "./components/MoodyPlayer";
+import Home from "./Home";
 
 function App() {
+  const [songs, setSongs] = useState();
   return (
-    <>
-      <FacialExpression />
-      <MoodyPlayer/>
-    </>
+    <div className="bg-amber-50 h-screen w-full">
+      <Home songs={songs} setSongs={setSongs} />
+    </div>
   );
 }
 
